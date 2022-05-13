@@ -1,15 +1,11 @@
-#FROM gradle:jdk11 AS build
-#COPY --chown=gradle:gradle . /home/gradle/src
-#WORKDIR /home/gradle/src
-#RUN gradle build --no-daemon
-
-FROM openjdk:11-jre-slim
-EXPOSE 8080
+FROM adoptopenjdk:11-jre-hotspot as builder
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} casoestudio.jar
-ENTRYPOINT ["java","-jar","/casoestudio.jar"]
-#EXPOSE 8080
-#RUN mkdir /app
-#COPY --from=build /home/gradle/src/build/libs/*.jar /casoestudio.jar/
-#ENTRYPOINT ["java", "-jar", "/casoestudio.jar"]
-#ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom"," jar","casoestudio.jar"]
+RUN java -Djarmode=layertools -jar casoestudio.jar extract
+
+FROM adoptopenjdk:11-jre-hotspot
+COPY --from=builder dependencies/ ./
+COPY --from=builder snapshot-dependencies/ ./
+COPY --from=builder spring-boot-loader/ ./
+COPY --from=builder application/ ./
+ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]
