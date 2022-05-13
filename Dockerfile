@@ -7,4 +7,5 @@ FROM openjdk:11-jre-slim
 EXPOSE 8080
 RUN mkdir /app
 COPY --from=build /home/gradle/src/build/libs/*.jar /casoestudio.jar/
-ENTRYPOINT ["java", "-jar", "/casoestudio.jar"]
+#ENTRYPOINT ["java", "-jar", "/casoestudio.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom"," jar","casoestudio.jar"]
