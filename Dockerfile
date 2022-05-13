@@ -5,10 +5,9 @@
 
 FROM openjdk:11-jre-slim
 EXPOSE 8080
-VOLUME /tmp
-ARG JAR_FILE
+ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} casoestudio.jar
-ENTRYPOINT ["java","-Dspring.profiles.active-prod","-jar","/casoestudio.jar"]
+ENTRYPOINT ["java","-jar","/casoestudio.jar"]
 #EXPOSE 8080
 #RUN mkdir /app
 #COPY --from=build /home/gradle/src/build/libs/*.jar /casoestudio.jar/
