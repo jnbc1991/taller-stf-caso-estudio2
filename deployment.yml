@@ -2,12 +2,12 @@
 apiVersion: "apps/v1"
 kind: "Deployment"
 metadata:
-  name: "hello-app"
+  name: "casoestudio"
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: "hello-app"
+      app: "casoestudio"
   strategy:
     rollingUpdate:
       maxSurge: 2
@@ -16,7 +16,7 @@ spec:
   template:
     metadata:
       labels:
-        app: "hello-app"
+        app: "casoestudio"
     spec:
       containers:
       - name: "casoestudio"
@@ -32,7 +32,7 @@ spec:
 apiVersion: "v1"
 kind: "Service"
 metadata:
-  name: "hello-app"
+  name: "casoestudio"
 spec:
   type: LoadBalancer
   ports:
