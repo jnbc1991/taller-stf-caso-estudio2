@@ -12,6 +12,6 @@ public class TestController {
 
     @GetMapping
     public ResponseEntity<?> helloWorld(){
-        return new ResponseEntity<>("Hello world from Spring Boot", HttpStatus.OK);
+        return new ResponseEntity<>("Hello world from Spring Boot | Taller Cloud/DevOps Stefanini.", HttpStatus.OK);
     }
 }
