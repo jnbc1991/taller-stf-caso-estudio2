@@ -51,6 +51,7 @@ jobs:
       # Build docker image
       - name: Build docker image
         run: |-
+          gcloud auth configure-docker
           docker build . --file Dockerfile --tag gcr.io/taller-stefanini/casoestudio:latest
           docker push gcr.io/taller-stefanini/casoestudio:latest
 
