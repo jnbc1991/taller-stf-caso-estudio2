@@ -1,11 +1,11 @@
-FROM adoptopenjdk:11-jre-hotspot as builder
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} casoestudio.jar
-RUN java -Djarmode=layertools -jar casoestudio.jar extract
+FROM gradle:jdk11 AS build
+COPY --chown=gradle:gradle . /home/gradle/src
+WORKDIR /home/gradle/src
+RUN gradle build --no-daemon
 
-FROM adoptopenjdk:11-jre-hotspot
-COPY --from=builder dependencies/ ./
-COPY --from=builder snapshot-dependencies/ ./
-COPY --from=builder spring-boot-loader/ ./
-COPY --from=builder application/ ./
-ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]
+FROM openjdk:11-jre-slim
+ENV ENVIRONMENT=${ENVIRONMENT}
+EXPOSE 8080
+RUN mkdir /app
+COPY --from=build /home/gradle/src/build/libs/*.jar casoestudio.jar
+ENTRYPOINT ["java", "-Dspring.profiles.active=${ENVIRONMENT}", "-jar", "casoestudio.jar"]
